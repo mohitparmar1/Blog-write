@@ -1,6 +1,7 @@
 import express from "express";
 import connectTomongoDB from "./config/db.js";
 import authRoutes from "./routes/blog.js";
+
 const app = express();
 const port = 9000;
 app.use(express.json());
