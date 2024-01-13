@@ -13,12 +13,12 @@ class AuthController {
         if (isUserExists == null) {
           const salt = await bcrypt.genSalt(10);
           const hashedPassword = await bcrypt.hash(password, salt);
-          const user = new authModel({
+          const newUser = new authModel({
             username,
             email,
             password: hashedPassword,
           });
-          const savedUser = await user.save();
+          const savedUser = await newUser.save();
           if (savedUser) {
             res.status(201).json({
               message: "User registered successfully",
@@ -30,6 +30,10 @@ class AuthController {
             message: "User already exists",
           });
         }
+      } else {
+        res.status(400).json({
+          message: "Please fill all the fields",
+        });
       }
     } catch (error) {
       res.status(400).json({
@@ -48,13 +52,14 @@ class AuthController {
         ) {
           const token = jwt.sign(
             { username: isEmail.username, email: isEmail.email },
-            jwtPassword,{expiresIn: '5d'}
+            jwtPassword,
+            { expiresIn: "5d" }
           );
           res.status(200).json({
-            message:"login successfully",
-            name : isEmail.username,
-            token
-          })
+            message: "login successfully",
+            name: isEmail.username,
+            token,
+          });
         } else {
           res.status(400).json({
             message: "Invalid credentials",

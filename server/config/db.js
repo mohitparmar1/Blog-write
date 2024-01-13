@@ -1,9 +1,9 @@
 import mongoose from "mongoose";
+import dotenv from "dotenv";
+dotenv.config();
 
 const connectTomongoDB = async () => {
-  const connect = await mongoose.connect(
-    "mongodb://127.0.0.1:27017/blog_app_project"
-  );
+  const connect = await mongoose.connect(process.env.MONGODB_URL);
   if (connect) {
     console.log("MongoDB connected");
   }
