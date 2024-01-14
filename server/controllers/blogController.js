@@ -5,7 +5,7 @@ import authModel from "../models/authModel.js";
 class blogController {
   static getAllBlogs = async (req, res) => {
     try {
-      const blog = await blogModel.find();
+      const blog = await blogModel.find({});
       if (blog) {
         res.status(200).json({
           message: "All blogs",
