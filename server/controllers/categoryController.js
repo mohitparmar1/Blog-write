@@ -1,42 +1,39 @@
 import categoryModel from "../models/categoryModel.js";
+
 class categoryController {
-  static getAllCategories(req, res) {
+  static getAllCategories = async (req, res) => {
     try {
-      const fetchAllcategories = categoryModel.find({});
+      const fetchAllcategories = await categoryModel.find({});
       res.status(200).json({
         message: "All categories",
         data: fetchAllcategories,
       });
     } catch (error) {
       res.status(500).json({
-        message: error,
+        message: "error occured at catch block",
       });
     }
-  }
+  };
+
   static addNewCategory = async (req, res) => {
     try {
-      const findCategory = categoryController.findOne({
-        category: req.body.category,
-      });
-      if (findCategory) {
+      const { title } = req.body;
+      const categoryExist = await categoryModel.findOne({ title });
+      if (categoryExist) {
         res.status(400).json({
-          message: "Category already exists",
+          message: "category already exist",
         });
       } else {
-        const newCategory = new categoryModel.create({
-          category: req.body.category,
+        const newCategory = new categoryModel({ title });
+        await newCategory.save();
+        res.status(200).json({
+          message: "category added successfully",
+          data: newCategory,
         });
-        const savedCategory = await newCategory.save();
-        if (savedCategory) {
-          res.status(201).json({
-            message: "Category added successfully",
-            data: savedCategory,
-          });
-        }
       }
     } catch (error) {
       res.status(500).json({
-        message: error,
+        message: "error occured at catch block",
       });
     }
   };

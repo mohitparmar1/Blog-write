@@ -5,7 +5,7 @@ import authModel from "../models/authModel.js";
 class blogController {
   static getAllBlogs = async (req, res) => {
     try {
-      const blog = await blogModel.find({});
+      const blog = await blogModel.find({ user: req.user._id });
       if (blog) {
         res.status(200).json({
           message: "All blogs",
@@ -23,39 +23,42 @@ class blogController {
     }
   };
   static addNewBlog = async (req, res) => {
-    const { title, category, description, thumbnail, user } = req.body;
+    const { title, description, category } = req.body;
     try {
-        const category = categoryModel.findOne({category: category}) 
-      if (title && category && description && thumbnail && user) {
-        const newBlog = new blogModel({
+      if (title && description && category) {
+        const addBlog = new blogModel({
           title,
-          category,
           description,
-          thumbnail,
-          user,
+          category,
+          thumbnail: req.file.path,
+          user: req.user._id,
         });
-        const savedBlog = await newBlog.save();
+        const savedBlog = await addBlog.save();
         if (savedBlog) {
-          res.status(201).json({
+          res.status(200).json({
             message: "Blog added successfully",
             data: savedBlog,
           });
+        } else {
+          res.status(400).json({
+            message: "Blog not added",
+          });
         }
       } else {
-        res.status(400).json({
-          message: "Please fill all the fields",
+        return res.status(400).json({
+          message: "All fields are required",
         });
       }
     } catch (error) {
-      res.status(500).json({
-        message: error,
+      return res.status(500).json({
+        message: error.message,
       });
     }
   };
   static getSingleBlog = async (req, res) => {
     const { id } = req.params;
     try {
-      const blog = blogModel.findById(id);
+      const blog = await blogModel.findById(id);
       if (blog) {
         res.status(200).json({
           message: "Single blog",
