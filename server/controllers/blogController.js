@@ -51,7 +51,7 @@ class blogController {
       }
     } catch (error) {
       return res.status(500).json({
-        message: error.message,
+        message: "something went wrong",
       });
     }
   };

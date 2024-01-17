@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 
 const Navbar = () => {
   return (
-    <div className="w-screen bg-blue-400 h-[60px] m-0 flex items-center justify-between">
+    <div className="w-screen bg-blue-600 h-[60px] m-0 flex items-center justify-between">
       <h2 className="text-white text-2xl font-bold text-left mx-5 cursor-pointer">
         <Link to="/">Blog Write</Link>
       </h2>
@@ -23,11 +23,11 @@ const Navbar = () => {
 
       <div className="flex flex-row">
         <ul className="flex flex-row justify-end">
-          <li className="text-white text-lg font-regular mx-2 p-2 cursor-pointer">
+          <li className="text-white text-lg font-regular mx-2 p-2 cursor-pointer hover:bg-blue-400 rounded-md">
             <Link to="/login">Login</Link>
           </li>
-          <li className="text-white text-lg font-regular mx-2 p-2 cursor-pointer">
-            Register
+          <li className="text-white text-lg font-regular mx-2 p-2 cursor-pointer hover:bg-blue-400 rounded-md">
+            <Link to="/register">Register</Link>
           </li>
         </ul>
       </div>

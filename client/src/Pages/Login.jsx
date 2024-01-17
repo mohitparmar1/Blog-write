@@ -1,4 +1,5 @@
 // components/Login.js
+import axios from "axios";
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 
@@ -17,10 +18,18 @@ const Login = () => {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     // Add your login logic here
-    console.log("Logging in with:", formData);
+    try {
+      const res = await axios.post(
+        "http://localhost:9000/api/v1/user/login",
+        formData
+      );
+      alert(res.data.message);
+    } catch (error) {
+      alert("Login failed. Please try again.");
+    }
   };
 
   return (
@@ -67,6 +76,7 @@ const Login = () => {
         <button
           type="submit"
           className="w-full bg-blue-500 text-white py-2 rounded-md hover:bg-blue-600 focus:outline-none"
+          onSubmit={handleSubmit}
         >
           {active === "Login" ? "Login" : "Register"}
         </button>
@@ -75,7 +85,7 @@ const Login = () => {
           <Link
             to="/register"
             className="text-blue-600"
-            onClick={()=> setActive(active === "Login" ? "Register" : "Login")}
+            onClick={() => setActive(active === "Login" ? "Register" : "Login")}
           >
             {active === "Login" ? "Register" : "Login"}
           </Link>
